@@ -16,7 +16,7 @@ trait SocketFunction
      */
     protected function resub(array $sub=[]){
         $new_sub=[];
-        $temp1=['account','positions','balance_and_position','orders','orders-algo'];
+        $temp1=['account','positions','balance_and_position','orders','orders-algo', 'algo-advance'];
 
         foreach ($sub as $v) {
             foreach ($temp1 as $tv){
