@@ -185,4 +185,15 @@ class Trade extends Request
         return $this->exec();
     }
 
+
+    /**
+     * POST /api/v5/trade/cancel-advance-algos
+     */
+    public function postCancelAdvanceAlgos(array $data=[]){
+        $this->type = 'POST';
+        $this->path = '/api/v5/trade/cancel-advance-algos';
+
+        $this->data = $data;
+        return $this->exec();
+    }
 }

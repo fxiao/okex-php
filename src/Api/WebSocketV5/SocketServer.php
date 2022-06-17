@@ -96,15 +96,33 @@ class SocketServer
             $timestamp=time();
 
             $message = $timestamp.'GET/users/self/verify';
-            $sign=base64_encode(hash_hmac('sha256', $message, $keysecret['secret'], true));
-            $data = json_encode([
-                'op' => "login",
-                'args' => [
-                    ['apiKey'=>$keysecret['key'],
+
+            $keysecretData = [];
+            if ($keysecret['key'] == 'multiple') {
+                $keysecrets = json_decode($keysecret['passphrase'], true);
+                foreach ($keysecrets as $ksp) {
+                    $sign=base64_encode(hash_hmac('sha256', $message, $ksp['secret'], true));
+                    $keysecretData[] = [
+                        'apiKey'=>$ksp['key'],
+                        'passphrase'=>$ksp['passphrase'],
+                        'timestamp'=>$timestamp,
+                        'sign'=>$sign
+                    ];
+                }
+                
+            } else {
+                $sign=base64_encode(hash_hmac('sha256', $message, $keysecret['secret'], true));
+                $keysecretData = [[
+                    'apiKey'=>$keysecret['key'],
                     'passphrase'=>$keysecret['passphrase'],
                     'timestamp'=>$timestamp,
-                    'sign'=>$sign]
-                ]
+                    'sign'=>$sign
+                ]];
+            }
+
+            $data = json_encode([
+                'op' => "login",
+                'args' => $keysecretData
             ]);
 
             $con->send($data);
@@ -126,8 +144,10 @@ class SocketServer
                     $con->tag_data_time='1619149751';
                     return;
                 }*/
-                unset($data['arg']['uid']);
-                $table=json_encode($data['arg']);
+                //unset($data['arg']['uid']);
+                $tableData = $data['arg'];
+                unset($tableData['uid']);
+                $table=json_encode($tableData);
 
                 if($con->tag != 'public') {
                     $table=$this->userKey($con->tag_keysecret,$table);
