@@ -98,8 +98,8 @@ class SocketServer
             $message = $timestamp.'GET/users/self/verify';
 
             $keysecretData = [];
-            if ($keysecret['key'] == 'multiple') {
-                $keysecrets = json_decode($keysecret['passphrase'], true);
+            $keysecrets = json_decode($keysecret['passphrase'], true);
+            if (is_array($keysecrets)) {
                 foreach ($keysecrets as $ksp) {
                     $sign=base64_encode(hash_hmac('sha256', $message, $ksp['secret'], true));
                     $keysecretData[] = [
