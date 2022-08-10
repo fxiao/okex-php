@@ -137,7 +137,7 @@ class SocketClient
                                 [instId] => BTC-USD-210924
                     )*/
                     //是否是当前用户获取数据
-                    if(empty($this->keysecret) || $this->keysecret['key']!=$is_array[0]) continue;
+                    //if(empty($this->keysecret) || $this->keysecret['key']!=$is_array[0]) continue;
 
                     $data=$global->getQueue($k);
                     $temp[$k]=$data;

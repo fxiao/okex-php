@@ -72,8 +72,9 @@ trait SocketGlobal
         //最大存储数据量，超过后保留一条最新的数据，其余数据全部删除。
         $max= isset($this->config['queue_count']) ? $this->config['queue_count'] : 100;
 
-        if(!isset($this->client->$key)) $this->add($key,[$value]);
-        else {
+        if(!isset($this->client->$key)) {
+            $this->add($key,[$value]);
+        } else {
             do{
                 $old_value=$new_value=$this->client->$key;
 
